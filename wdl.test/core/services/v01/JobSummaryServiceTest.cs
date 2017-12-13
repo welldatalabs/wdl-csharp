@@ -26,12 +26,12 @@ namespace wdl.test.core.services.v01
         }
 
         /// <summary>
-        /// Test retireving job summaries using a well api number.
+        /// Test get job summaries using a well api number.
         /// Validate every summary data row has the same well api number and demonstrate
         /// using column metadata to find the row data correct index.
         /// </summary>
         [TestMethod]
-        public void Get_Test()
+        public void Get_Success()
         {
             var expectedWellApiNumber = _jobHeaders.First().API;
 
@@ -51,15 +51,13 @@ namespace wdl.test.core.services.v01
                 var rowWellApiNumber = row.Skip(wellApiColumn.ColumnIndex).First();
                 Assert.AreEqual(expectedWellApiNumber, rowWellApiNumber);
             }
-
         }
 
         /// <summary>
-        /// Test retireving job summaries using a well api number.
-        /// Validate every summary data row has the same well api number.
+        /// Async test get job summaries using a well api number.
         /// </summary>
         [TestMethod]
-        public async Task GetAsync_Test()
+        public async Task GetAsync_Success()
         {
             var jobId = _jobHeaders.First().JobId;
             var jobSummaries = await _jobSummaryService.GetAsync(jobId.ToString());
