@@ -12,7 +12,7 @@ namespace wdl.common.models.v01
         public Guid WellId { get; set; }
         public string WellName { get; set; }
         public string API { get; set; }
-        public string JobStartDate { get; set; }
+		public DateTime? JobStartDate { get; set; }
         public string ServiceCompany { get; set; }
         public string Operator { get; set; }
         public string AssetGroup { get; set; }
@@ -20,17 +20,17 @@ namespace wdl.common.models.v01
         public string JobType { get; set; }
         public string FracSystem { get; set; }
         public string FluidSystem { get; set; }
-        public Decimal? BottomholeLatitude { get; set; }
-        public Decimal? BottomholeLongitude { get; set; }
+        public decimal? BottomholeLatitude { get; set; }
+        public decimal? BottomholeLongitude { get; set; }
         public int? MeasuredDepth { get; set; }
         public string MeasuredDepthUnitText { get; set; }
         public int StageCount { get; set; }
         public string PadName { get; set; }
         public string County { get; set; }
         public string State { get; set; }
-        public string SurfaceLatitude { get; set; }
-        public string SurfaceLongitude { get; set; }
+		public decimal? SurfaceLatitude { get; set; }
+		public decimal? SurfaceLongitude { get; set; }
         public string LegalDescription { get; set; }
-        public string ModifiedUtc { get; set; }
+        public DateTime? ModifiedUtc { get; set; }
     }
 }

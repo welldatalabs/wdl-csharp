@@ -43,11 +43,11 @@ namespace wdl.test.core.services.v01
         /// Test get the most recent 10 job summaries.
         /// </summary>
         [Test]
-        public void GetAll_Success()
+        public void GetAll_Demo()
         {
-            var jobSummaries = _jobSummaryService.GetAll();
+            var jobSummaries = _jobSummaryService.GetAll().ToList();
             Assert.IsNotNull(jobSummaries);
-            Assert.IsTrue(jobSummaries.Count() > 0);
+            Assert.IsTrue(jobSummaries.Count > 0);
         }
 
 
@@ -55,11 +55,12 @@ namespace wdl.test.core.services.v01
         /// Async Test get the most recent 10 job summaries.
         /// </summary>
 		[Test]
-        public async Task GetAllAsync_Success()
+        public async Task GetAllAsync_Demo()
         {
-            var jobSummaries = await _jobSummaryService.GetAllAsync();
+			var task = _jobSummaryService.GetAllAsync();
+            var jobSummaries = (await task).ToList() ;
             Assert.IsNotNull(jobSummaries);
-            Assert.IsTrue(jobSummaries.Count() > 0);
+            Assert.IsTrue(jobSummaries.Count > 0);
         }
 
 
@@ -69,13 +70,13 @@ namespace wdl.test.core.services.v01
         /// using column metadata to find the row data correct index.
         /// </summary>
 		[Test]
-        public void Get_Success()
+        public void Get_Demo()
         {
             var expectedWellApiNumber = _jobHeaders.First().API;
 
-            var jobSummaries = _jobSummaryService.Get(expectedWellApiNumber);
+            var jobSummaries = _jobSummaryService.Get(expectedWellApiNumber).ToList();
             Assert.IsNotNull(jobSummaries);
-            Assert.AreEqual(1, jobSummaries.Count());
+            Assert.AreEqual(1, jobSummaries.Count);
 
             var jobSummary = jobSummaries.First();
 
@@ -96,10 +97,11 @@ namespace wdl.test.core.services.v01
         /// Async test get job summaries using a well api number.
         /// </summary>
 		[Test]
-        public async Task GetAsync_Success()
+        public async Task GetAsync_Demo()
         {
             var jobId = _jobHeaders.First().JobId;
-            var jobSummaries = await _jobSummaryService.GetAsync(jobId.ToString());
+			var task = _jobSummaryService.GetAsync(jobId.ToString());
+            var jobSummaries = (await task).ToList();
             Assert.IsNotNull(jobSummaries);
             Assert.AreEqual(1, jobSummaries.Count());
             Assert.AreEqual(jobId, jobSummaries.First().JobId);
@@ -110,14 +112,14 @@ namespace wdl.test.core.services.v01
         /// Test get job summaries using a timeframe.
         /// </summary>
 		[Test]
-        public void GetByDates_Success()
+        public void GetByChangeUtc_Demo()
         {
-            var realModifiedUtc = GetRealModifiedUtc();
+            var realModifiedUtc = GetActualModifiedUtc();
             var fromUtc = realModifiedUtc.AddSeconds(-1);
             var toUtc = realModifiedUtc.AddSeconds(1);
-            var jobSummaries = _jobSummaryService.GetByDates(fromUtc, toUtc);
+            var jobSummaries = _jobSummaryService.GetByChangeUtc(fromUtc, toUtc).ToList();
             Assert.IsNotNull(jobSummaries);
-            Assert.IsTrue(jobSummaries.Count() > 0);
+            Assert.IsTrue(jobSummaries.Count > 0);
         }
 
 
@@ -125,14 +127,15 @@ namespace wdl.test.core.services.v01
         /// Async test get job summaries using a timeframe.
         /// </summary>
 		[Test]
-        public async Task GetByDatesAsync_Success()
+        public async Task GetByChangeUtcAsync_Demo()
         {
-            var realModifiedUtc = GetRealModifiedUtc();
+            var realModifiedUtc = GetActualModifiedUtc();
             var fromUtc = realModifiedUtc.AddSeconds(-1);
             var toUtc = realModifiedUtc.AddSeconds(1);
-            var jobSummaries = await _jobSummaryService.GetByDatesAsync(fromUtc, toUtc);
+			var task = _jobSummaryService.GetByChangeUtcAsync(fromUtc, toUtc);
+            var jobSummaries = (await task).ToList();
             Assert.IsNotNull(jobSummaries);
-            Assert.IsTrue(jobSummaries.Count() > 0);
+            Assert.IsTrue(jobSummaries.Count > 0);
         }
 
 
@@ -140,18 +143,12 @@ namespace wdl.test.core.services.v01
 		// PRIVATE HELPERS
 		//**********************************************************************************
 
-        private DateTime GetRealModifiedUtc()
+        private DateTime GetActualModifiedUtc()
         {
-            var modifiedUtc = DateTime.UtcNow;
-            var jobHeaders = _jobHeaderService.GetAll();
-            var count = jobHeaders.Count();
-            if (count > 0)
-            {
-                var jobHeader = jobHeaders.First();
-                modifiedUtc = DateTime.Parse(jobHeader.ModifiedUtc);
-            }
-
-            return modifiedUtc;
+	        var header = _jobHeaderService
+		        .GetAll()
+		        .FirstOrDefault(m => m.ModifiedUtc.HasValue);
+	        return header == null ? DateTime.UtcNow : header.ModifiedUtc.Value;
         }
 
     }

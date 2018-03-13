@@ -67,7 +67,7 @@ namespace wdl.core.services.v01
         /// <summary>
         /// Get all job headers.
         /// </summary>
-        /// <returns>Returns all job headers available for the api key.</returns>
+		/// <returns>Collection of all JobHeader objects available for the api key.</returns>
         public IEnumerable<JobHeader> GetAll()
         {
             try
@@ -94,16 +94,19 @@ namespace wdl.core.services.v01
 
 
         /// <summary>
-        /// Get job header data for a specific timeframe.
+        /// Synchronous version of the method that gets job headers for jobs that have changed 
+		/// within a given UTC range.  If toChangeUtc is null, will return headers for all jobs 
+		/// modified since fromChangeUtc.  If fromChangeUtc is null, will return headers for all
+		/// jobs modified before toChangeUtc.  
         /// </summary>
-        /// <param name="fromUtc">Optional from datetime in UTC format</param>
-        /// <param name="toUtc">Optional to datetime in UTC format</param>
+        /// <param name="fromChangeUtc">Optional from datetime in UTC format</param>
+        /// <param name="toChangeUtc">Optional to datetime in UTC format</param>
         /// <returns>Collection of JobHeader objects.</returns>
-        public IEnumerable<JobHeader> GetByDates(DateTime? fromUtc, DateTime? toUtc)
+        public IEnumerable<JobHeader> GetByChangeUtc(DateTime? fromChangeUtc, DateTime? toChangeUtc)
         {
             try
             {
-                return GetByDatesAsync(fromUtc, toUtc).Result;
+                return GetByChangeUtcAsync(fromChangeUtc, toChangeUtc).Result;
             }
             catch (AggregateException ae)
             {
@@ -114,12 +117,15 @@ namespace wdl.core.services.v01
 
 
         /// <summary>
-        /// Get job header data for a specific timeframe.
+        /// Asynchronous version of the method that gets job headers for jobs that have changed 
+        /// within a given UTC range.  If toChangeUtc is null, will return headers for all jobs 
+        /// modified since fromChangeUtc.  If fromChangeUtc is null, will return headers for all
+        /// jobs modified before toChangeUtc. 
         /// </summary>
         /// <param name="fromUtc">Optional from datetime in UTC format</param>
         /// <param name="toUtc">Optional to datetime in UTC format</param>
         /// <returns>Collection of JobHeader objects.</returns>
-        public async Task<IEnumerable<JobHeader>> GetByDatesAsync(DateTime? fromUtc, DateTime? toUtc)
+        public async Task<IEnumerable<JobHeader>> GetByChangeUtcAsync(DateTime? fromUtc, DateTime? toUtc)
         {
             string requestUri = string.Format("{0}?fromUtc={1}&toUtc={2}", Endpiont, fromUtc, toUtc);
             var jobHeaderJson = await _client.GetStringAsync(requestUri);

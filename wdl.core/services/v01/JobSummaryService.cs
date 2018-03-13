@@ -94,16 +94,19 @@ namespace wdl.core.services.v01
 
 
         /// <summary>
-        /// Get job summary data for a specific timeframe. Only the 10 most recent items will be returned. 
+		/// Synchronous version of the method that gets job summary data for jobs that have changed 
+        /// within a given UTC range.  If toChangeUtc is null, will return date for all jobs 
+        /// modified since fromChangeUtc.  If fromChangeUtc is null, will return data for all
+        /// jobs modified before toChangeUtc. 
         /// </summary>
         /// <param name="fromUtc">Optional from datetime in UTC format</param>
         /// <param name="toUtc">Optional to datetime in UTC format</param>
         /// <returns>Collection of JobHeader objects.</returns>
-        public IEnumerable<JobSummary> GetByDates(DateTime? fromUtc, DateTime? toUtc)
+        public IEnumerable<JobSummary> GetByChangeUtc(DateTime? fromUtc, DateTime? toUtc)
         {
             try
             {
-                return GetByDatesAsync(fromUtc, toUtc).Result;
+                return GetByChangeUtcAsync(fromUtc, toUtc).Result;
             }
             catch (AggregateException ae)
             {
@@ -114,12 +117,15 @@ namespace wdl.core.services.v01
 
 
         /// <summary>
-        /// Get job header data for a specific timeframe. Only the 10 most recent items will be returned. 
+        /// Asynchronous version of the method that gets job summary data for jobs that have changed 
+        /// within a given UTC range.  If toChangeUtc is null, will return date for all jobs 
+        /// modified since fromChangeUtc.  If fromChangeUtc is null, will return data for all
+        /// jobs modified before toChangeUtc. 
         /// </summary>
         /// <param name="fromUtc">Optional from datetime in UTC format</param>
         /// <param name="toUtc">Optional to datetime in UTC format</param>
         /// <returns>Collection of JobHeader objects.</returns>
-        public async Task<IEnumerable<JobSummary>> GetByDatesAsync(DateTime? fromUtc, DateTime? toUtc)
+        public async Task<IEnumerable<JobSummary>> GetByChangeUtcAsync(DateTime? fromUtc, DateTime? toUtc)
         {
             string requestUri = string.Format("{0}?fromUtc={1}&toUtc={2}", Endpiont, fromUtc, toUtc);
             var jobSummaryJson = await _client.GetStringAsync(requestUri);
