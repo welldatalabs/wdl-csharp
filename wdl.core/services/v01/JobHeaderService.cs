@@ -18,6 +18,7 @@ namespace wdl.core.services.v01
         private HttpClient _client;
         private const string Endpiont = "jobheaders";
 
+
         /// <summary>
         /// Initialize JobHeaderService with api authorization token.
         /// </summary>
@@ -27,6 +28,7 @@ namespace wdl.core.services.v01
         {
             _client = HttpHelper.GetHttClient(authorizationToken);
         }
+
 
         /// <summary>
         /// Get job header data for a specific job id or well API number.  A job id will only return a
@@ -47,6 +49,7 @@ namespace wdl.core.services.v01
             }
         }
 
+
         /// <summary>
         /// Get job header data for a specific job id or well API number.  A job id will only return a
         /// single result in the collection.  A well API Number may return multiple results.
@@ -59,6 +62,7 @@ namespace wdl.core.services.v01
             var jobHeaderJson = await _client.GetStringAsync(requestUri);
             return jobHeaderJson.DeserializeJson<IEnumerable<JobHeader>>();
         }
+
 
         /// <summary>
         /// Get all job headers.
@@ -77,6 +81,7 @@ namespace wdl.core.services.v01
             }
         }
 
+
         /// <summary>
         /// Get all job headers.
         /// </summary>
@@ -86,5 +91,40 @@ namespace wdl.core.services.v01
             var jobHeaderJson = await _client.GetStringAsync(Endpiont);
             return jobHeaderJson.DeserializeJson<IEnumerable<JobHeader>>();
         }
-    }
+
+
+        /// <summary>
+        /// Get job header data for a specific timeframe.
+        /// </summary>
+        /// <param name="fromUtc">Optional from datetime in UTC format</param>
+        /// <param name="toUtc">Optional to datetime in UTC format</param>
+        /// <returns>Collection of JobHeader objects.</returns>
+        public IEnumerable<JobHeader> GetByDates(DateTime? fromUtc, DateTime? toUtc)
+        {
+            try
+            {
+                return GetByDatesAsync(fromUtc, toUtc).Result;
+            }
+            catch (AggregateException ae)
+            {
+                ae.Flatten();
+                throw ae.InnerExceptions.First();
+            }
+        }
+
+
+        /// <summary>
+        /// Get job header data for a specific timeframe.
+        /// </summary>
+        /// <param name="fromUtc">Optional from datetime in UTC format</param>
+        /// <param name="toUtc">Optional to datetime in UTC format</param>
+        /// <returns>Collection of JobHeader objects.</returns>
+        public async Task<IEnumerable<JobHeader>> GetByDatesAsync(DateTime? fromUtc, DateTime? toUtc)
+        {
+            string requestUri = string.Format("{0}?fromUtc={1}&toUtc={2}", Endpiont, fromUtc, toUtc);
+            var jobHeaderJson = await _client.GetStringAsync(requestUri);
+            return jobHeaderJson.DeserializeJson<IEnumerable<JobHeader>>();
+        }
+    
+	}
 }

@@ -28,6 +28,9 @@ namespace wdl.common.models.v01
         public string PadName { get; set; }
         public string County { get; set; }
         public string State { get; set; }
+        public string SurfaceLatitude { get; set; }
+        public string SurfaceLongitude { get; set; }
+        public string LegalDescription { get; set; }
         public string ModifiedUtc { get; set; }
     }
 }

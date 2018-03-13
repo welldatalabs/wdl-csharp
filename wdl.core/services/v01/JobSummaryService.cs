@@ -18,6 +18,7 @@ namespace wdl.core.services.v01
         private HttpClient _client;
         private const string Endpiont = "jobsummaries";
 
+
         /// <summary>
         /// Initialize JobSummaryService with api authorization token.
         /// </summary>
@@ -27,6 +28,36 @@ namespace wdl.core.services.v01
         {
             _client = HttpHelper.GetHttClient(authorizationToken);
         }
+
+
+        /// <summary>
+        /// Get The first 10 job summaries.
+        /// </summary>
+        /// <returns>Returns all job headers available for the api key.</returns>
+        public IEnumerable<JobSummary> GetAll()
+        {
+            try
+            {
+                return GetAllAsync().Result;
+            }
+            catch (AggregateException ae)
+            {
+                ae.Flatten();
+                throw ae.InnerExceptions.First();
+            }
+        }
+
+
+        /// <summary>
+        /// Get The first 10 job summaries.
+        /// </summary>
+        /// <returns>Returns all job headers available for the api key.</returns>
+        public async Task<IEnumerable<JobSummary>> GetAllAsync()
+        {
+            var jobSummaryJson = await _client.GetStringAsync(Endpiont);
+            return jobSummaryJson.DeserializeJson<IEnumerable<JobSummary>>();
+        }
+
 
         /// <summary>
         /// Get job summary data for a specific job id or well API number.  A job id will only return a
@@ -47,6 +78,7 @@ namespace wdl.core.services.v01
             }
         }
 
+
         /// <summary>
         /// Get job summary data for a specific job id or well API number.  A job id will only return a
         /// single result in the collection.  A well API Number may return multiple results.
@@ -59,5 +91,40 @@ namespace wdl.core.services.v01
             var jobSummaryJson = await _client.GetStringAsync(requestUri);
             return jobSummaryJson.DeserializeJson<IEnumerable<JobSummary>>();
         }
+
+
+        /// <summary>
+        /// Get job summary data for a specific timeframe. Only the 10 most recent items will be returned. 
+        /// </summary>
+        /// <param name="fromUtc">Optional from datetime in UTC format</param>
+        /// <param name="toUtc">Optional to datetime in UTC format</param>
+        /// <returns>Collection of JobHeader objects.</returns>
+        public IEnumerable<JobSummary> GetByDates(DateTime? fromUtc, DateTime? toUtc)
+        {
+            try
+            {
+                return GetByDatesAsync(fromUtc, toUtc).Result;
+            }
+            catch (AggregateException ae)
+            {
+                ae.Flatten();
+                throw ae.InnerExceptions.First();
+            }
+        }
+
+
+        /// <summary>
+        /// Get job header data for a specific timeframe. Only the 10 most recent items will be returned. 
+        /// </summary>
+        /// <param name="fromUtc">Optional from datetime in UTC format</param>
+        /// <param name="toUtc">Optional to datetime in UTC format</param>
+        /// <returns>Collection of JobHeader objects.</returns>
+        public async Task<IEnumerable<JobSummary>> GetByDatesAsync(DateTime? fromUtc, DateTime? toUtc)
+        {
+            string requestUri = string.Format("{0}?fromUtc={1}&toUtc={2}", Endpiont, fromUtc, toUtc);
+            var jobSummaryJson = await _client.GetStringAsync(requestUri);
+            return jobSummaryJson.DeserializeJson<IEnumerable<JobSummary>>();
+        }
+
     }
 }
