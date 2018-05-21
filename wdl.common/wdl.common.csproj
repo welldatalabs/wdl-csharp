@@ -44,7 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="models\v01\CustomFlagAssociatedChannel.cs" />
+    <Compile Include="models\v01\CustomFlag.cs" />
+    <Compile Include="models\v01\FluidsAndChemicals.cs" />
     <Compile Include="models\v01\JobHeader.cs" />
+    <Compile Include="models\v01\DepthFeature.cs" />
     <Compile Include="models\v01\JobSummary.cs" />
     <Compile Include="models\v01\JobSummaryColumn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

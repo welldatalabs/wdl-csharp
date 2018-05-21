@@ -16,7 +16,7 @@ namespace wdl.test.core.services.v01
 		// PROPERTIES/FIELDS
 		//**********************************************************************************
        
-		private const string TestApiKey = "b+S15uKWEK0lFU+NomEmvekn8yk/ALTTBAYOJalVKrI=";
+        private const string TestApiKey = "b+S15uKWEK0lFU+NomEmvekn8yk/ALTTBAYOJalVKrI=";
         private static JobHeaderService _jobHeaderService;
         private static JobSummaryService _jobSummaryService;
         private static IEnumerable<JobHeader> _jobHeaders;
@@ -115,9 +115,9 @@ namespace wdl.test.core.services.v01
         public void GetByChangeUtc_Demo()
         {
             var realModifiedUtc = GetActualModifiedUtc();
-            var fromUtc = realModifiedUtc.AddSeconds(-1);
-            var toUtc = realModifiedUtc.AddSeconds(1);
-            var jobSummaries = _jobSummaryService.GetByChangeUtc(fromUtc, toUtc).ToList();
+            var fromChangeUtc = realModifiedUtc.AddSeconds(-1);
+            var toChangeUtc = realModifiedUtc.AddSeconds(1);
+            var jobSummaries = _jobSummaryService.GetByChangeUtc(fromChangeUtc, toChangeUtc).ToList();
             Assert.IsNotNull(jobSummaries);
             Assert.IsTrue(jobSummaries.Count > 0);
         }
@@ -130,9 +130,38 @@ namespace wdl.test.core.services.v01
         public async Task GetByChangeUtcAsync_Demo()
         {
             var realModifiedUtc = GetActualModifiedUtc();
-            var fromUtc = realModifiedUtc.AddSeconds(-1);
-            var toUtc = realModifiedUtc.AddSeconds(1);
-			var task = _jobSummaryService.GetByChangeUtcAsync(fromUtc, toUtc);
+            var fromChangeUtc = realModifiedUtc.AddSeconds(-1);
+            var toChangeUtc = realModifiedUtc.AddSeconds(1);
+            var task = _jobSummaryService.GetByChangeUtcAsync(fromChangeUtc, toChangeUtc);
+            var jobSummaries = (await task).ToList();
+            Assert.IsNotNull(jobSummaries);
+            Assert.IsTrue(jobSummaries.Count > 0);
+        }
+
+
+        /// <summary>
+        /// Test get job summaries using a stage number range.
+        /// </summary>
+        [Test]
+        public void GetByStageNumber_Demo()
+        {
+            var fromStageNumber = 1;
+            var toStageNumber = 1;
+            var jobSummaries = _jobSummaryService.GetByStageNumber(fromStageNumber, toStageNumber).ToList();
+            Assert.IsNotNull(jobSummaries);
+            Assert.IsTrue(jobSummaries.Count > 0);
+        }
+
+
+        /// <summary>
+        /// Async test get job summaries using a stage number range.
+        /// </summary>
+        [Test]
+        public async Task GetByStageNumberAsync_Demo()
+        {
+            var fromStageNumber = 1;
+            var toStageNumber = 1;
+            var task = _jobSummaryService.GetByStageNumberAsync(fromStageNumber, toStageNumber);
             var jobSummaries = (await task).ToList();
             Assert.IsNotNull(jobSummaries);
             Assert.IsTrue(jobSummaries.Count > 0);

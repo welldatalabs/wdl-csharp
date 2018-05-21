@@ -122,12 +122,12 @@ namespace wdl.core.services.v01
         /// modified since fromChangeUtc.  If fromChangeUtc is null, will return headers for all
         /// jobs modified before toChangeUtc. 
         /// </summary>
-        /// <param name="fromUtc">Optional from datetime in UTC format</param>
-        /// <param name="toUtc">Optional to datetime in UTC format</param>
+        /// <param name="fromChangeUtc">Optional from datetime in UTC format</param>
+        /// <param name="toChangeUtc">Optional to datetime in UTC format</param>
         /// <returns>Collection of JobHeader objects.</returns>
-        public async Task<IEnumerable<JobHeader>> GetByChangeUtcAsync(DateTime? fromUtc, DateTime? toUtc)
+        public async Task<IEnumerable<JobHeader>> GetByChangeUtcAsync(DateTime? fromChangeUtc, DateTime? toChangeUtc)
         {
-            string requestUri = string.Format("{0}?fromUtc={1}&toUtc={2}", Endpiont, fromUtc, toUtc);
+            string requestUri = string.Format("{0}?fromChangeUtc={1}&toChangeUtc={2}", Endpiont, fromChangeUtc, toChangeUtc);
             var jobHeaderJson = await _client.GetStringAsync(requestUri);
             return jobHeaderJson.DeserializeJson<IEnumerable<JobHeader>>();
         }

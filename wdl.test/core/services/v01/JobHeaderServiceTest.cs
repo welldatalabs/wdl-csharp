@@ -51,7 +51,7 @@ namespace wdl.test.core.services.v01
 		[Test]
         public void Get_Demo()
         {
-            string wellApiNumber = "10-203-04050-60-";
+            string wellApiNumber = GetWellApiNumber();
             var jobHeaders = _jobHeaderService.Get(wellApiNumber).ToList();
             Assert.IsTrue(jobHeaders.Count > 0);
         }
@@ -63,7 +63,7 @@ namespace wdl.test.core.services.v01
 		[Test]
         public async Task GetAsync_Demo()
         {
-            string wellApiNumber = "10-203-04050-60-";
+            string wellApiNumber = GetWellApiNumber();
 			var task = _jobHeaderService.GetAsync(wellApiNumber);
             var jobHeaders = (await task).ToList();
             Assert.IsTrue(jobHeaders.Count > 0);
@@ -77,9 +77,9 @@ namespace wdl.test.core.services.v01
         public void GetByChangeUtc_Demo()
         {
             var realModifiedUtc = GetActualModifiedUtc();
-			var fromUtc = realModifiedUtc.AddMinutes(-1);
-			var toUtc = realModifiedUtc.AddMinutes(1);
-            var jobHeaders = _jobHeaderService.GetByChangeUtc(fromUtc, toUtc).ToList();
+            var fromChangeUtc = realModifiedUtc.AddMinutes(-1);
+            var toChangeUtc = realModifiedUtc.AddMinutes(1);
+            var jobHeaders = _jobHeaderService.GetByChangeUtc(fromChangeUtc, toChangeUtc).ToList();
             Assert.IsTrue(jobHeaders.Count > 0);
         }
 
@@ -91,9 +91,9 @@ namespace wdl.test.core.services.v01
         public async Task GetByChangeUtcAsync_Demo()
         {
             var realModifiedUtc = GetActualModifiedUtc();
-            var fromUtc = realModifiedUtc.AddMinutes(-1);
-            var toUtc = realModifiedUtc.AddMinutes(1);
-			var task = _jobHeaderService.GetByChangeUtcAsync(fromUtc, toUtc);
+            var fromChangeUtc = realModifiedUtc.AddMinutes(-1);
+            var toChangeUtc = realModifiedUtc.AddMinutes(1);
+            var task = _jobHeaderService.GetByChangeUtcAsync(fromChangeUtc, toChangeUtc);
             var jobHeaders = (await task).ToList();
             Assert.IsTrue(jobHeaders.Count > 0);
         }
@@ -115,6 +115,12 @@ namespace wdl.test.core.services.v01
 		//**********************************************************************************
 		// PRIVATE HELPERS
 		//**********************************************************************************
+
+        private string GetWellApiNumber()
+        {
+            var header = _jobHeaderService.GetAll().FirstOrDefault();
+            return header == null ? "10-203-04050-60-" : header.API;
+        }
 
         private DateTime GetActualModifiedUtc()
         {

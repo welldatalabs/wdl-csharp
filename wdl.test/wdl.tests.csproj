@@ -58,7 +58,10 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="core\services\v01\FluidsAndChemicalsServiceTest.cs" />
     <Compile Include="core\services\v01\JobHeaderServiceTest.cs" />
+    <Compile Include="core\services\v01\CustomFlagServiceTest.cs" />
+    <Compile Include="core\services\v01\DepthFeatureServiceTest.cs" />
     <Compile Include="core\services\v01\JobSummaryServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
