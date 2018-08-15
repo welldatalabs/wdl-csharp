@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wdl.common", "wdl.common\wdl.common.csproj", "{29766204-D68B-484C-90DF-D6AF63B163CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wdl.sdk.common", "wdl.sdk.common\wdl.sdk.common.csproj", "{29766204-D68B-484C-90DF-D6AF63B163CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wdl.core", "wdl.core\wdl.core.csproj", "{E3EA0E98-BE4E-40A4-84B9-322C3153A27B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wdl.sdk.core", "wdl.sdk.core\wdl.sdk.core.csproj", "{E3EA0E98-BE4E-40A4-84B9-322C3153A27B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wdl.tests", "wdl.test\wdl.tests.csproj", "{B4149ACF-2760-412E-BB93-080615572D4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wdl.sdk.tests", "wdl.sdk.test\wdl.sdk.tests.csproj", "{B4149ACF-2760-412E-BB93-080615572D4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
