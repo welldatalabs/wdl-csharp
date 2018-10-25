@@ -15,5 +15,9 @@ namespace wdl.sdk.common.models.v01
         public string MassUnit { get; set; }
         public string Material { get; set; }
         public string MeshSize { get; set; }
+        public decimal? AvgConcentration { get; set; }
+        public string AvgConcentrationUnit { get; set; }
+        public decimal? MaxConcentration { get; set; }
+        public string MaxConcentrationUnit { get; set; }
     }
 }
