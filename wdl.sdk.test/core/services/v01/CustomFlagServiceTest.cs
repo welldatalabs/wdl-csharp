@@ -178,7 +178,7 @@ namespace wdl.test.core.services.v01
 	        var header = _jobHeaderService
 	            .Get(jobId)
 		        .FirstOrDefault(m => m.ModifiedUtc.HasValue);
-	        return header == null ? DateTime.UtcNow : header.ModifiedUtc.Value;
+	        return header?.ModifiedUtc ?? DateTime.UtcNow;
         }
 
     }
