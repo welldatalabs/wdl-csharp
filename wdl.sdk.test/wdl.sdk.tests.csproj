@@ -58,6 +58,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="core\services\v01\PerSecDataServiceTest.cs" />
     <Compile Include="core\services\v01\StageCommentsServiceTest.cs" />
     <Compile Include="core\services\v01\SleevesServiceTest.cs" />
     <Compile Include="core\services\v01\ProppantsServiceTest.cs" />

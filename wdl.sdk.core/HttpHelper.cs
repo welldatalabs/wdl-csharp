@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -102,6 +103,24 @@ namespace wdl.sdk.core
             }
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// This asynchronously returns a stream of the data that you can read from. Used by the PerSecData api.
+        /// NOTE: Like all streams it is CRITICAL that you close the stream. If left open, it will count against your number of concurrent connections.
+        /// See PerSecDataService for example usage.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<Stream> GetStreamAsync(string uri, string apiKey, string version)
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+            _client.DefaultRequestHeaders.Add("api-version", version);
+
+            try {
+                return await _client.GetStreamAsync(uri);
+            } catch (Exception ex) {
+                return await Task.FromResult(new MemoryStream($"ERROR: {ex}".Select(x => (byte)x).ToArray()));
+            }
         }
     }
 }

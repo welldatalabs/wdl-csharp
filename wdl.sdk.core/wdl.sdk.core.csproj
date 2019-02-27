@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="HttpHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="services\v01\PerSecDataService.cs" />
     <Compile Include="services\v01\StageCommentsService.cs" />
     <Compile Include="services\v01\SleevesService.cs" />
     <Compile Include="services\v01\ProppantsService.cs" />
