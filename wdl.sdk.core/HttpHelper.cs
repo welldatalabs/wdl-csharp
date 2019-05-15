@@ -29,7 +29,7 @@ namespace wdl.sdk.core
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.ConnectionClose = false;    //this will set http-keepalive header to true
-            client.Timeout = new TimeSpan(0, 0, 30);
+            client.Timeout = new TimeSpan(0, 0, 60);
             return client;
         }
 
