@@ -14,7 +14,8 @@ namespace wdl.sdk.common.models.v01
         public decimal StageNumber { get; set; }
         public string Type { get; set; }
         public string SubType { get; set; }
-        public string Name { get; set; }
+	    public string TradeName { get; set; }
+		public string Name { get; set; }
         public decimal? Volume { get; set; }
         public string VolumeUnit { get; set; }
         public decimal? VolumeConcentration { get; set; }
