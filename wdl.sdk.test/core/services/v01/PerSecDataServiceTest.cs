@@ -60,6 +60,56 @@ namespace wdl.test.core.services.v01
             }
             download.Delete();
         }
+        
+        [Test]
+        public async Task Download_File_With_AllChannels_Includes_Extra_Channels()
+        {
+            var download = await _perSecDataService.DownloadToFile(JobId, 1, 2, true);
+
+            FileAssert.Exists(download);
+            Assert.NotZero(download.Length);
+
+            var globalHeaders = new[]
+            {
+                "TREATING PRESSURE",
+                "BOTTOMHOLE PRESSURE",
+                "ANNULUS PRESSURE",
+                "SURFACE PRESSURE",
+                "SLURRY RATE",
+                "CLEAN VOLUME",
+                "SLURRY VOLUME",
+                "PROPPANT TOTAL",
+                "PROPPANT CONC",
+                "BOTTOMHOLE PROPPANT CONC"
+            };
+            
+            using (var reader = File.OpenText(download.FullName))
+            {
+                var header = reader.ReadLine() ?? String.Empty; // Main header row for column names
+                var units = reader.ReadLine();                  // Sub-header row for column units
+
+                var columnCount = header.Count(ch => ch == ',') + 1;
+
+                
+                var headerCollection = new SortedSet<string>(header.Split(','));
+
+                Assert.True(headerCollection.IsProperSupersetOf(globalHeaders));
+
+
+                long recordCount = 0;
+                while (reader.ReadLine() != null)
+                {
+                    recordCount++;
+                }
+
+                Console.WriteLine("Per-sec file stats\n" +
+                                  $"Bytes: {download.Length}\t" +
+                                  $"Columns: {columnCount}\t" +
+                                  $"Records: {recordCount}");
+                Console.WriteLine($"Downloaded headers: {string.Join(", ", headerCollection)}");
+            }
+            download.Delete();
+        }
 
 
         //**********************************************************************************

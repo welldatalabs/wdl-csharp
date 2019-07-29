@@ -26,29 +26,30 @@ namespace wdl.sdk.core.services.v01
             _apiKey = apiKey;
             _baseUri = string.IsNullOrWhiteSpace(baseUri) ? HttpHelper.BaseUri : new Uri(baseUri);
         }
-        
+
         /// <summary>
         /// This downloads the per-sec data for the series of stages of a job
         /// </summary>
         /// <param name="id">Job ID or Job API Number</param>
         /// <param name="startingStageNumber">Stage number to start with</param>
         /// <param name="endingStageNumber">Stage number to end with <example>20.1m</example></param>
+        /// <param name="includeAllChannels">Choose whether to download all available data columns, or just the default "Global" channels.</param>
         /// <returns>FileInfo for the temp file</returns>
-        public async Task<FileInfo> DownloadToFile(string id, decimal? startingStageNumber = null, decimal? endingStageNumber = null)
+        public async Task<FileInfo> DownloadToFile(string id, decimal? startingStageNumber = null, decimal? endingStageNumber = null, bool includeAllChannels = false)
         {
             var fileName = Path.GetTempFileName();
 
             using (var file = File.OpenWrite(fileName))
             {
-                await DownloadToStream(file, id, startingStageNumber, endingStageNumber);
+                await DownloadToStream(file, id, startingStageNumber, endingStageNumber, includeAllChannels);
             }
 
             return new FileInfo(fileName);
         }
 
-        internal async Task DownloadToStream(Stream outStream, string id, decimal? startingStageNumber = null, decimal? endingStageNumber = null)
+        internal async Task DownloadToStream(Stream outStream, string id, decimal? startingStageNumber = null, decimal? endingStageNumber = null, bool includeAllChannels = false)
         {
-            var requestUri = CreateRequestUri(id, startingStageNumber, endingStageNumber);
+            var requestUri = CreateRequestUri(id, startingStageNumber, endingStageNumber, includeAllChannels);
 
             using (var stream = await HttpHelper.GetStreamAsync(requestUri, _apiKey, _version))
             {
@@ -56,9 +57,10 @@ namespace wdl.sdk.core.services.v01
             }
         }
 
-        private string CreateRequestUri(string id, decimal? startingStageNumber, decimal? endingStageNumber)
+        private string CreateRequestUri(string id, decimal? startingStageNumber, decimal? endingStageNumber, bool includeAllChannels = false)
         {
-            var parameters = new Dictionary<string, string>(3);
+            var parameters = new Dictionary<string, string>(4);
+
             if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentException("Job ID must be a GUID or an API number", nameof(id));
@@ -82,6 +84,11 @@ namespace wdl.sdk.core.services.v01
                     toStage = ((int) endingStageNumber).ToString();
 
                 parameters.Add("toStageNumber", toStage);
+            }
+
+            if (includeAllChannels)
+            {
+                parameters.Add("includeAllChannels", "true");
             }
 
             return HttpHelper.GetRequestUri(_baseUri, _endpoint, parameters);
