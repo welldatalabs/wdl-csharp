@@ -115,8 +115,8 @@ namespace wdl.test.core.services.v01
         public void GetByChangeUtc_Demo()
         {
             var realModifiedUtc = GetActualModifiedUtc();
-            var fromChangeUtc = realModifiedUtc.AddYears(-1);
-            var toChangeUtc = realModifiedUtc.AddYears(1);
+            var fromChangeUtc = realModifiedUtc.AddYears(-2);
+            var toChangeUtc = realModifiedUtc.AddYears(2);
             var customFlags = _customFlagService.GetByChangeUtc(fromChangeUtc, toChangeUtc).ToList();
             Assert.IsNotNull(customFlags);
             Assert.IsTrue(customFlags.Count > 0);
@@ -130,8 +130,8 @@ namespace wdl.test.core.services.v01
         public async Task GetByChangeUtcAsync_Demo()
         {
             var realModifiedUtc = GetActualModifiedUtc();
-            var fromChangeUtc = realModifiedUtc.AddYears(-1);
-            var toChangeUtc = realModifiedUtc.AddYears(1);
+            var fromChangeUtc = realModifiedUtc.AddYears(-2);
+            var toChangeUtc = realModifiedUtc.AddYears(2);
             var task = _customFlagService.GetByChangeUtcAsync(fromChangeUtc, toChangeUtc);
             var customFlags = (await task).ToList();
             Assert.IsNotNull(customFlags);
