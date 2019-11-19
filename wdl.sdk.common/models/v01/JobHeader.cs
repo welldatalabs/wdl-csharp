@@ -14,6 +14,7 @@ namespace wdl.sdk.common.models.v01
         public string API { get; set; }
         public DateTime? JobStartDate { get; set; }
         public string ServiceCompany { get; set; }
+        public string Fleet { get; set; }
         public string Operator { get; set; }
         public string AssetGroup { get; set; }
         public string Formation { get; set; }
